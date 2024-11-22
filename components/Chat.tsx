@@ -13,15 +13,17 @@ export default function ClientComponent({
 }) {
   const timeout = useRef<number | null>(null);
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
+
+  // optional: use configId from environment variable
   const configId = process.env['NEXT_PUBLIC_HUME_CONFIG_ID'];
   
   return (
     <div className="relative grow flex flex-col mx-auto w-full overflow-hidden h-[0px]">
-      <header className="text-center py-4 bg-blue-500 text-white">
+      <div className="fixed top-0 left-0 right-0 bg-blue-500 text-white p-4 text-center z-50">
         <h1 className="text-xl font-bold">English Learning Assistant</h1>
         <p className="text-sm opacity-80">Practice speaking and improve your pronunciation</p>
-      </header>
-      
+      </div>
+
       <VoiceProvider
         auth={{ type: "accessToken", value: accessToken }}
         configId={configId}
@@ -40,10 +42,13 @@ export default function ClientComponent({
             }
           }, 200);
         }}
+        initialPrompt="Hi! I'm your English teacher. I'll help you practice speaking and improve your pronunciation. What would you like to practice today?"
       >
-        <Messages ref={ref} />
-        <Controls />
-        <StartCall />
+        <div className="mt-16">
+          <Messages ref={ref} />
+          <Controls />
+          <StartCall />
+        </div>
       </VoiceProvider>
     </div>
   );

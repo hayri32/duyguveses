@@ -8,18 +8,11 @@ import { Mic } from "lucide-react";
 export default function StartCall() {
   const { status, connect } = useVoice();
 
-  const suggestions = [
-    "Help me learn English",
-    "Teach me new vocabulary",
-    "Practice pronunciation with me",
-    "Let's have a conversation"
-  ];
-
   return (
     <AnimatePresence>
       {status.value !== "connected" ? (
         <motion.div
-          className="fixed inset-0 p-4 flex flex-col items-center justify-center bg-background"
+          className="fixed inset-0 p-4 flex items-center justify-center bg-background"
           initial="initial"
           animate="enter"
           exit="exit"
@@ -29,20 +22,6 @@ export default function StartCall() {
             exit: { opacity: 0 },
           }}
         >
-          <div className="text-center mb-4">
-            <h2 className="text-lg font-semibold mb-2">Try saying:</h2>
-            <div className="space-y-2">
-              {suggestions.map((suggestion, index) => (
-                <div 
-                  key={index}
-                  className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 cursor-pointer"
-                >
-                  "{suggestion}"
-                </div>
-              ))}
-            </div>
-          </div>
-          
           <AnimatePresence>
             <motion.div
               variants={{

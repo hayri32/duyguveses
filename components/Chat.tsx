@@ -6,81 +6,6 @@ import Controls from "./Controls";
 import StartCall from "./StartCall";
 import { ComponentRef, useRef } from "react";
 
-const teacherTools = [
-  {
-    type: "function",
-    function: {
-      name: "correctPronunciation",
-      description: "Correct student's pronunciation and provide feedback",
-      parameters: {
-        type: "object",
-        properties: {
-          word: {
-            type: "string",
-            description: "The word or phrase to be corrected"
-          },
-          correctForm: {
-            type: "string",
-            description: "The correct pronunciation in IPA format"
-          },
-          feedback: {
-            type: "string",
-            description: "Encouraging feedback for the student"
-          }
-        },
-        required: ["word", "correctForm"]
-      }
-    }
-  },
-  {
-    type: "function",
-    function: {
-      name: "teachVocabulary",
-      description: "Explain new vocabulary words with examples",
-      parameters: {
-        type: "object",
-        properties: {
-          word: {
-            type: "string",
-            description: "The word to teach"
-          },
-          definition: {
-            type: "string",
-            description: "Simple definition of the word"
-          },
-          example: {
-            type: "string",
-            description: "Example sentence using the word"
-          }
-        },
-        required: ["word", "definition"]
-      }
-    }
-  },
-  {
-    type: "function",
-    function: {
-      name: "practiceDialogue",
-      description: "Guide student through conversation practice",
-      parameters: {
-        type: "object",
-        properties: {
-          topic: {
-            type: "string",
-            description: "Conversation topic"
-          },
-          difficulty: {
-            type: "string",
-            enum: ["beginner", "intermediate", "advanced"],
-            description: "Difficulty level of the conversation"
-          }
-        },
-        required: ["topic"]
-      }
-    }
-  }
-];
-
 export default function ClientComponent({
   accessToken,
 }: {
@@ -101,7 +26,12 @@ export default function ClientComponent({
           type: "accessToken", 
           value: accessToken 
         }}
-        tools={teacherTools}
+        onStart={() => {
+          console.log("Voice session started");
+        }}
+        onEnd={() => {
+          console.log("Voice session ended");
+        }}
         onMessage={() => {
           if (timeout.current) {
             window.clearTimeout(timeout.current);

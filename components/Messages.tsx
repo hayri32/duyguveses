@@ -12,7 +12,9 @@ const Messages = forwardRef<
 >(function Messages(_, ref) {
   const { messages } = useVoice();
 
-  const getTeacherIcon = (content: string) => {
+  const getTeacherIcon = (content: string | undefined) => {
+    if (!content) return <Lightbulb className="w-4 h-4 text-green-500" />;
+    
     if (content.toLowerCase().includes("pronunciation")) {
       return <Volume2 className="w-4 h-4 text-blue-500" />;
     }

@@ -13,16 +13,15 @@ export default function ClientComponent({
 }) {
   const timeout = useRef<number | null>(null);
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
-
-  // optional: use configId from environment variable
   const configId = process.env['NEXT_PUBLIC_HUME_CONFIG_ID'];
   
   return (
-    <div
-      className={
-        "relative grow flex flex-col mx-auto w-full overflow-hidden h-[0px]"
-      }
-    >
+    <div className="relative grow flex flex-col mx-auto w-full overflow-hidden h-[0px]">
+      <header className="text-center py-4 bg-blue-500 text-white">
+        <h1 className="text-xl font-bold">English Learning Assistant</h1>
+        <p className="text-sm opacity-80">Practice speaking and improve your pronunciation</p>
+      </header>
+      
       <VoiceProvider
         auth={{ type: "accessToken", value: accessToken }}
         configId={configId}
@@ -34,7 +33,6 @@ export default function ClientComponent({
           timeout.current = window.setTimeout(() => {
             if (ref.current) {
               const scrollHeight = ref.current.scrollHeight;
-
               ref.current.scrollTo({
                 top: scrollHeight,
                 behavior: "smooth",

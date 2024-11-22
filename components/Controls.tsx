@@ -12,10 +12,11 @@ export default function Controls() {
   const { disconnect, status, isMuted, unmute, mute, micFft } = useVoice();
 
   const suggestions = [
-    "Hi! I'm Sarah, your English teacher. How can I help you today?",
-    "Would you like to practice basic conversation?",
-    "Let's learn some useful daily phrases.",
-    "We can work on your pronunciation together."
+    "Can you help me learn English?",
+    "How do you say 'merhaba' in English?", 
+    "Let's practice daily conversation",
+    "Can you teach me some vocabulary?",
+    "Please correct my pronunciation"
   ];
 
   return (
@@ -28,9 +29,9 @@ export default function Controls() {
           {suggestions.map((suggestion, index) => (
             <div 
               key={index}
-              className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-full hover:bg-blue-100 cursor-pointer"
+              className="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm rounded-full hover:bg-blue-100 cursor-pointer animate-pulse"
             >
-              {suggestion}
+              Try saying: "{suggestion}"
             </div>
           ))}
         </div>

@@ -1,72 +1,68 @@
-"use client";
-import { cn } from "@/utils";
-import { useVoice } from "@humeai/voice-react";
-import Expressions from "./Expressions";
-import { AnimatePresence, motion } from "framer-motion";
-import { ComponentRef, forwardRef } from "react";
+use client;
 
-const Messages = forwardRef<
-  ComponentRef<typeof motion.div>,
-  Record<never, never>
->(function Messages(_, ref) {
-  const { messages } = useVoice();
+import { type Message } from "ai";
+import { useRef } from "react";
+
+export interface MessagesProps {
+  messages: Message[];
+  isLoading: boolean;
+}
+
+export function Messages({ messages, isLoading }: MessagesProps) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   return (
-    <motion.div
-      layoutScroll
-      className={"grow rounded-md overflow-auto p-4"}
-      ref={ref}
-    >
-      <motion.div
-        className={"max-w-2xl mx-auto w-full flex flex-col gap-4 pb-24"}
-      >
-        <AnimatePresence mode={"popLayout"}>
-          {messages.map((msg, index) => {
-            if (
-              msg.type === "user_message" ||
-              msg.type === "assistant_message"
-            ) {
-              return (
-                <motion.div
-                  key={msg.type + index}
-                  className={cn(
-                    "w-[80%]",
-                    "bg-card",
-                    "border border-border rounded",
-                    msg.type === "user_message" ? "ml-auto" : ""
-                  )}
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: 0,
-                  }}
-                >
-                  <div
-                    className={cn(
-                      "text-xs capitalize font-medium leading-none opacity-50 pt-4 px-3"
-                    )}
-                  >
-                    {msg.message.role}
-                  </div>
-                  <div className={"pb-3 px-3"}>{msg.message.content}</div>
-                  <Expressions values={{ ...msg.models.prosody?.scores }} />
-                </motion.div>
-              );
-            }
+    <div className="relative mx-auto max-w-2xl px-4">
+      {messages.length === 0 && !isLoading && (
+        <div className="whitespace-pre-wrap">
+          <p className="text-base text-muted-foreground">
+            Welcome to English Learning Assistant! You can:
+            • Ask for pronunciation help
+            • Practice speaking exercises
+            • Learn new vocabulary
+            • Get grammar explanations
+          </p>
+        </div>
+      )}
+      
+      <div className="space-y-4 mt-4">
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`
+              flex
+              ${message.role === "user" ? "justify-end" : "justify-start"}
+            `}
+          >
+            <div
+              className={`
+                whitespace-pre-wrap
+                max-w-[90%]
+                rounded-lg
+                px-4
+                py-2
+                ${message.role === "user"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700"}
+              `}
+            >
+              {message.content}
+            </div>
+          </div>
+        ))}
 
-            return null;
-          })}
-        </AnimatePresence>
-      </motion.div>
-    </motion.div>
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-200 text-gray-700 rounded-lg px-4 py-2">
+              Thinking...
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <div ref={messagesEndRef} />
+    </div>
   );
-});
+}
 
 export default Messages;

@@ -1,31 +1,57 @@
 "use client";
 
 import { useVoice } from "@humeai/voice-react";
-import { Button } from "@/components/ui/button";
-import { Mic, Square } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "./ui/button";
+import { Mic } from "lucide-react";
 
 export default function StartCall() {
-  const { connect, disconnect, connected } = useVoice();
-  
+  const { status, connect } = useVoice();
+
   return (
-    <div className="fixed bottom-4 right-4">
-      <Button
-        size="lg"
-        variant={connected ? "destructive" : "default"}
-        onClick={() => (connected ? disconnect() : connect())}
-      >
-        {connected ? (
-          <>
-            <Square className="w-4 h-4 mr-2" />
-            Stop Practice
-          </>
-        ) : (
-          <>
-            <Mic className="w-4 h-4 mr-2" />
-            Start Speaking
-          </>
-        )}
-      </Button>
-    </div>
+    <AnimatePresence>
+      {status.value !== "connected" ? (
+        <motion.div
+          className="fixed inset-0 p-4 flex items-center justify-center bg-background"
+          initial="initial"
+          animate="enter"
+          exit="exit"
+          variants={{
+            initial: { opacity: 0 },
+            enter: { opacity: 1 },
+            exit: { opacity: 0 },
+          }}
+        >
+          <AnimatePresence>
+            <motion.div
+              variants={{
+                initial: { scale: 0.5 },
+                enter: { scale: 1 },
+                exit: { scale: 0.5 },
+              }}
+            >
+              <Button
+                className="z-50 flex items-center gap-1.5"
+                onClick={() => {
+                  connect()
+                    .then(() => {})
+                    .catch(() => {})
+                    .finally(() => {});
+                }}
+              >
+                <span>
+                  <Mic
+                    className="size-4 opacity-50"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                  />
+                </span>
+                <span>Start Speaking Practice</span>
+              </Button>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 }
